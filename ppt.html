@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AKM 1 - Akuntansi Keuangan & Standar Akuntansi</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-main: #0b0f19;
+      --primary: #1e3a8a;
+      --secondary: #15803d;
+      --accent-yellow: #facc15;
+      --accent-orange: #ea580c;
+      --text-dark: #0f172a;
+      --border-dark: #0f172a;
+
+      --font-title: 'Plus Jakarta Sans', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-code: 'Space Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      background-color: var(--bg-main);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: var(--font-body);
+      padding: 10px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* CONTAINER UTAMA (DESKTOP) */
+    .deck-container {
+      width: 100%;
+      max-width: 960px;
+      height: 540px;
+      position: relative;
+      border: 4px solid var(--border-dark);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 8px 8px 0px rgba(250, 204, 21, 0.9);
+      background-color: #ffffff;
+    }
+
+    .deck-container::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('bg-akuntansi.jpg'); 
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0.55;
+      z-index: 0;
+    }
+
+    /* SISTEM ANIMASI TRANSISI SLIDE */
+    .slide {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      pointer-events: none;
+      padding: 45px 35px 65px 35px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      box-sizing: border-box;
+      z-index: 1;
+      overflow-y: auto; /* Memungkinkan scroll jika konten panjang di HP */
+
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0);
+      z-index: 2;
+    }
+
+    .slide.prev {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+
+    .slide-header {
+      position: absolute;
+      top: 15px;
+      left: 35px;
+      font-family: var(--font-code);
+      font-weight: 700;
+      font-size: 0.7rem;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+      text-transform: uppercase;
+      background: #ffffff;
+      padding: 3px 10px;
+      border: 2px solid var(--border-dark);
+      border-radius: 6px;
+      box-shadow: 2px 2px 0px var(--border-dark);
+      z-index: 3;
+    }
+
+    .slide-footer-text {
+      position: absolute;
+      bottom: 42px;
+      left: 35px;
+      font-weight: 800;
+      font-size: 0.75rem;
+      color: #0f172a;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 2px 8px;
+      border-radius: 4px;
+      z-index: 5;
+    }
+
+    .footer-stripes {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 30px;
+      display: flex;
+      flex-direction: column;
+      z-index: 5;
+      border-top: 3px solid var(--border-dark);
+    }
+    .stripe-yellow { height: 5px; background-color: var(--accent-yellow); }
+    .stripe-pattern {
+      height: 25px;
+      background: repeating-linear-gradient(135deg, #1e3a8a 0px, #1e3a8a 15px, #15803d 15px, #15803d 30px, #facc15 30px, #facc15 45px);
+    }
+
+    /* COVER LAYOUT */
+    .cover-layout {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .title-wrapper { position: relative; text-align: center; margin-bottom: 12px; }
+    
+    .text-creative {
+      font-family: var(--font-title);
+      font-weight: 900;
+      font-size: 3.2rem;
+      color: var(--primary);
+      line-height: 1;
+      letter-spacing: -1px;
+      text-transform: uppercase;
+      -webkit-text-stroke: 1px #ffffff;
+      text-shadow: 3px 3px 0px var(--accent-yellow), 5px 5px 0px var(--border-dark);
+    }
+    .text-portfolio {
+      font-family: var(--font-title);
+      font-weight: 900;
+      font-size: 2.6rem;
+      color: var(--secondary);
+      line-height: 1.1;
+      text-transform: uppercase;
+      -webkit-text-stroke: 1px #ffffff;
+      text-shadow: 3px 3px 0px var(--border-dark);
+    }
+
+    .team-box-cover {
+      width: 100%;
+      max-width: 840px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 3px solid var(--border-dark);
+      border-radius: 12px;
+      padding: 10px 14px;
+      box-shadow: 5px 5px 0px var(--primary);
+      margin-top: 8px;
+    }
+
+    .team-grid-cover {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .member-item {
+      background: #fef08a;
+      border: 2px solid var(--border-dark);
+      border-radius: 8px;
+      padding: 6px 4px;
+      text-align: center;
+      box-shadow: 2px 2px 0px var(--border-dark);
+    }
+    .member-item h4 {
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--text-dark);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .member-item p {
+      font-family: var(--font-code);
+      font-size: 0.68rem;
+      color: var(--primary);
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    /* JUDUL SLIDE UTAMA */
+    h2.slide-title {
+      font-family: var(--font-title);
+      font-weight: 900;
+      font-size: 1.4rem;
+      color: var(--primary);
+      margin-top: 10px;
+      margin-bottom: 14px;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 4px 10px;
+      border-radius: 8px;
+      border: 2px solid var(--border-dark);
+      box-shadow: 3px 3px 0px var(--border-dark);
+    }
+    h2.slide-title::before {
+      content: '';
+      display: inline-block;
+      width: 10px;
+      height: 20px;
+      background: var(--accent-yellow);
+      border: 2px solid var(--border-dark);
+      border-radius: 2px;
+    }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; width: 100%; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; }
+
+    /* KARTU KONTEN */
+    .card-retro {
+      background: rgba(255, 255, 255, 0.93);
+      border: 3px solid var(--border-dark);
+      border-radius: 12px;
+      padding: 14px 16px;
+      box-shadow: 4px 4px 0px var(--primary);
+    }
+    .card-retro-yellow {
+      background: rgba(254, 240, 138, 0.95);
+      border: 3px solid var(--border-dark);
+      border-radius: 12px;
+      padding: 14px 16px;
+      box-shadow: 4px 4px 0px var(--accent-orange);
+    }
+
+    .card-retro h3, .card-retro-yellow h3 {
+      font-family: var(--font-title);
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: var(--text-dark);
+      margin-bottom: 6px;
+    }
+    
+    .card-retro p, .card-retro-yellow p, li {
+      font-family: var(--font-body);
+      font-size: 0.78rem; 
+      color: var(--text-dark); 
+      line-height: 1.4;
+      font-weight: 600;
+    }
+
+    ul { padding-left: 16px; }
+    li { margin-bottom: 3px; }
+    strong { font-weight: 800; color: #000; }
+
+    .tag-number {
+      display: inline-block;
+      font-family: var(--font-code);
+      font-weight: 700;
+      font-size: 0.68rem;
+      background: var(--primary);
+      color: #fff;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-bottom: 6px;
+    }
+
+    .reference-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+    .reference-box {
+      background: rgba(255, 255, 255, 0.95);
+      border: 3px solid var(--border-dark);
+      padding: 10px 14px 10px 36px;
+      border-radius: 10px;
+      box-shadow: 3px 3px 0px var(--secondary);
+      text-indent: -20px;
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      font-weight: 600;
+      line-height: 1.4;
+      color: var(--text-dark);
+    }
+
+    /* CONTROLS NAVIGASI */
+    .controls {
+      margin-top: 14px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      z-index: 10;
+    }
+    .btn-nav {
+      background: var(--accent-yellow);
+      border: 3px solid var(--border-dark);
+      padding: 8px 18px;
+      font-family: var(--font-code);
+      font-weight: 700;
+      font-size: 0.8rem;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 3px 3px 0px var(--border-dark);
+      transition: all 0.1s ease;
+      user-select: none;
+    }
+    .btn-nav:hover { background: #fde047; }
+    .btn-nav:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0px var(--border-dark);
+    }
+    .slide-indicator { 
+      color: #ffffff; 
+      font-family: var(--font-code);
+      font-weight: 700; 
+      font-size: 0.8rem; 
+      background: #1e293b;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 2px solid var(--border-dark);
+    }
+
+    /* =======================================
+       RESPONSIVE DESIGN UNTUK HP (MOBILE)
+    ======================================= */
+    @media (max-width: 768px) {
+      body {
+        padding: 5px;
+      }
+      .deck-container {
+        height: auto;
+        min-height: 82vh;
+        border-radius: 14px;
+      }
+      .slide {
+        padding: 40px 16px 55px 16px;
+        position: absolute;
+      }
+      .slide-header {
+        top: 10px;
+        left: 16px;
+        font-size: 0.6rem;
+      }
+      .slide-footer-text {
+        left: 16px;
+        bottom: 35px;
+        font-size: 0.65rem;
+      }
+      .text-creative { font-size: 2.2rem; }
+      .text-portfolio { font-size: 1.8rem; }
+      
+      h2.slide-title {
+        font-size: 1.1rem;
+        margin-top: 5px;
+        margin-bottom: 10px;
+      }
+
+      /* Ubah Grid menjadi 1 Kolom di HP */
+      .grid-2, .grid-3 {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .team-grid-cover {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+      }
+
+      .card-retro, .card-retro-yellow {
+        padding: 10px 12px;
+      }
+      .card-retro p, .card-retro-yellow p, li {
+        font-size: 0.75rem;
+      }
+
+      .controls {
+        width: 100%;
+        justify-content: space-between;
+        margin-top: 10px;
+      }
+      .btn-nav {
+        padding: 8px 12px;
+        font-size: 0.72rem;
+      }
+      .slide-indicator {
+        font-size: 0.72rem;
+        padding: 7px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="deck-container">
+    
+    <!-- SLIDE 1: COVER -->
+    <div class="slide active">
+      <div class="cover-layout">
+        <div class="title-wrapper">
+          <div class="text-creative">Akuntansi</div>
+          <div class="text-portfolio">Keuangan 1</div>
+        </div>
+
+        <div class="team-box-cover">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed var(--border-dark); padding-bottom: 4px;">
+            <span class="tag-number" style="margin-bottom: 0;">KELOMPOK 01</span>
+            <strong style="font-family: var(--font-title); font-size: 0.8rem; color: var(--text-dark);">Kelas 25 AK8 • UBB</strong>
+          </div>
+          
+          <div class="team-grid-cover">
+            <div class="member-item">
+              <h4>Delfin Romansyah</h4>
+              <p>5012311001</p>
+            </div>
+            <div class="member-item">
+              <h4>Candra Nanda Winata</h4>
+              <p>5012311002</p>
+            </div>
+            <div class="member-item">
+              <h4>Khoirun Nafisya</h4>
+              <p>5012311003</p>
+            </div>
+            <div class="member-item">
+              <h4>Afdal Yasir</h4>
+              <p>5012311004</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: BAHASA BISNIS -->
+    <div class="slide">
+      <div class="slide-header">AKUNTANSI KEUANGAN MENENGAH 1</div>
+      <h2 class="slide-title">1. Akuntansi Sebagai Bahasa Bisnis</h2>
+      <div class="grid-3">
+        <div class="card-retro">
+          <span class="tag-number">01</span>
+          <h3>Pengertian</h3>
+          <p>Sistem informasi yang mengukur, memproses, dan mengomunikasikan informasi keuangan entitas bisnis.</p>
+        </div>
+        <div class="card-retro">
+          <span class="tag-number">02</span>
+          <h3>Fungsi Akuntansi Keuangan</h3>
+          <p>Menyediakan informasi keuangan historis yang akurat untuk mendukung pertanggungjawaban manajemen dan pengambilan keputusan pihak eksternal.</p>
+        </div>
+        <div class="card-retro-yellow">
+          <span class="tag-number">03</span>
+          <h3>Hubungan dengan Laporan Keuangan</h3>
+          <p>Laporan keuangan merupakan muara dan hasil akhir dari seluruh proses akuntansi keuangan yang disajikan secara terstruktur bagi para pemangku kepentingan.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: KONSEP PELAPORAN & PENGGUNA LAPORAN -->
+    <div class="slide">
+      <div class="slide-header">AKUNTANSI KEUANGAN MENENGAH 1</div>
+      <h2 class="slide-title">2. Konsep Pelaporan & Pengguna Laporan</h2>
+      <div class="grid-3">
+        <div class="card-retro">
+          <span class="tag-number">01</span>
+          <h3>Perbedaan Keuangan vs. Manajemen</h3>
+          <ul>
+            <li><strong>Keuangan:</strong> Eksternal, standar SAK/IFRS, data historis.</li>
+            <li><strong>Manajemen:</strong> Internal, bebas standar, fokus proyeksi.</li>
+          </ul>
+        </div>
+        <div class="card-retro">
+          <span class="tag-number">02</span>
+          <h3>Tujuan Pelaporan Keuangan</h3>
+          <p>Menyediakan informasi keuangan entitas yang berguna bagi investor dan kreditur dalam mengambil keputusan alokasi sumber daya.</p>
+        </div>
+        <div class="card-retro-yellow">
+          <span class="tag-number">03</span>
+          <h3>Pengguna Laporan Keuangan</h3>
+          <ul>
+            <li><strong>Utama:</strong> Investor, Kreditur, Pemasok.</li>
+            <li><strong>Lainnya:</strong> Manajemen, Pemerintah/Pajak, Masyarakat.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: PENGAKUAN, LAPORAN KEUANGAN & SAK -->
+    <div class="slide">
+      <div class="slide-header">AKUNTANSI KEUANGAN MENENGAH 1</div>
+      <h2 class="slide-title">3. Pengakuan, Laporan Keuangan, & SAK</h2>
+      <div class="grid-3">
+        <div class="card-retro">
+          <span class="tag-number">01</span>
+          <h3>Pengakuan & Pengukuran</h3>
+          <ul>
+            <li><strong>Pengakuan:</strong> Pencatatan transaksi saat memenuhi kriteria.</li>
+            <li><strong>Pengukuran:</strong> Penentuan nilai moneter (Biaya Historis/Nilai Wajar).</li>
+          </ul>
+        </div>
+        <div class="card-retro">
+          <span class="tag-number">02</span>
+          <h3>Jenis-Jenis Laporan Keuangan</h3>
+          <ul>
+            <li>Laporan Posisi Keuangan (Neraca)</li>
+            <li>Laporan Laba Rugi Komprehensif</li>
+            <li>Laporan Perubahan Ekuitas & Arus Kas</li>
+            <li>Catatan atas Laporan Keuangan (CALK)</li>
+          </ul>
+        </div>
+        <div class="card-retro-yellow">
+          <span class="tag-number">03</span>
+          <h3>Pengertian Standar Akuntansi (SAK)</h3>
+          <p>Kerangka acuan baku yang mengatur tata cara pencatatan dan penyajian laporan keuangan agar konsisten dan dapat diperbandingkan.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: STANDAR & KARAKTERISTIK -->
+    <div class="slide">
+      <div class="slide-header">AKUNTANSI KEUANGAN MENENGAH 1</div>
+      <h2 class="slide-title">4. Standar & Karakteristik Informasi</h2>
+      <div class="grid-3">
+        <div class="card-retro">
+          <span class="tag-number">01</span>
+          <h3>Tujuan Adanya Standar</h3>
+          <ul>
+            <li><strong>Keseragaman:</strong> Patokan baku penyusunan.</li>
+            <li><strong>Transparansi:</strong> Analisis antarentitas.</li>
+            <li><strong>Kepercayaan:</strong> Meningkatkan kredibilitas.</li>
+          </ul>
+        </div>
+        <div class="card-retro">
+          <span class="tag-number">02</span>
+          <h3>Jenis SAK di Indonesia</h3>
+          <ul>
+            <li><strong>SAK Internasional:</strong> Adopsi IFRS.</li>
+            <li><strong>SAK EP / ETAP:</strong> Entitas Privat.</li>
+            <li><strong>SAK Syariah & SAP:</strong> Transaksi Syariah & Govt.</li>
+          </ul>
+        </div>
+        <div class="card-retro-yellow">
+          <span class="tag-number">03</span>
+          <h3>Karakteristik Informasi</h3>
+          <ul>
+            <li><strong>Utama:</strong> Relevan & Representasi Tepat.</li>
+            <li><strong>Peningkat:</strong> Dapat dibandingkan, diverifikasi, tepat waktu, dan dipahami.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: KERANGKA DASAR -->
+    <div class="slide">
+      <div class="slide-header">AKUNTANSI KEUANGAN MENENGAH 1</div>
+      <h2 class="slide-title">5. Kerangka Dasar Pelaporan Keuangan</h2>
+      <div class="grid-2">
+        <div class="card-retro">
+          <h3>⚖️ Asumsi Dasar</h3>
+          <ul>
+            <li><strong>Basis Akrual:</strong> Transaksi diakui saat terjadi, bukan saat kas diterima.</li>
+            <li><strong>Going Concern:</strong> Entitas diasumsikan beroperasi secara berkelanjutan.</li>
+          </ul>
+        </div>
+        <div class="card-retro-yellow">
+          <h3>⭐ Karakteristik Kualitatif</h3>
+          <ul>
+            <li><strong>Relevan:</strong> Memiliki nilai prediktif & konfirmatif.</li>
+            <li><strong>Representasi Tepat:</strong> Bebas dari kesalahan materiil dan netral.</li>
+            <li><strong>Peningkat:</strong> Dapat dibandingkan dan diverifikasi.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: DAFTAR PUSTAKA -->
+    <div class="slide">
+      <div class="slide-header">AKUNTANSI KEUANGAN MENENGAH 1</div>
+      <h2 class="slide-title">6. Daftar Pustaka Utama</h2>
+      <div class="reference-container">
+        <div class="reference-box">
+          Ikatan Akuntan Indonesia (IAI). (2024). <em>Standar Akuntansi Keuangan (SAK) Effective per 1 Januari 2024</em>. Jakarta: Dewan Standar Akuntansi Keuangan IAI.
+        </div>
+        <div class="reference-box">
+          Kieso, D. E., Weygandt, J. J., & Warfield, T. D. (2020). <em>Intermediate Accounting: IFRS Edition</em> (4th ed.). Hoboken, NJ: John Wiley & Sons.
+        </div>
+        <div class="reference-box">
+          Martani, D., Veronica NPS, S., Wardhani, R., Farahmita, A., & Tanujaya, E. (2019). <em>Akuntansi Keuangan Menengah Berbasis PSAK: Buku 1</em> (Revisi ed.). Jakarta: Penerbit Salemba Empat.
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: PENUTUP -->
+    <div class="slide">
+      <div class="cover-layout">
+        <div class="card-retro-yellow" style="text-align: center; max-width: 650px; margin-bottom: 16px;">
+          <h3>✨ Kesimpulan</h3>
+          <p>Akuntansi Keuangan berfungsi menyajikan data keuangan yang transparan, terukur, dan terstandarisasi untuk mendukung efisiensi pasar modal serta keputusan investasi.</p>
+        </div>
+        <div class="text-creative" style="font-size: 2.5rem;">Terima Kasih</div>
+        <div class="text-portfolio" style="font-size: 1.8rem;">Sesi Diskusi & Tanya Jawab</div>
+      </div>
+    </div>
+
+    <!-- FOOTER PERMANEN -->
+    <div class="slide-footer-text">Akuntansi Keuangan Menengah 1 • Universitas Bangka Belitung</div>
+    <div class="footer-stripes">
+      <div class="stripe-yellow"></div>
+      <div class="stripe-pattern"></div>
+    </div>
+  </div>
+
+  <!-- NAVIGASI -->
+  <div class="controls">
+    <button class="btn-nav" id="btn-prev" onclick="prevSlide()">◀ SEBELUMNYA</button>
+    <span class="slide-indicator" id="indicator">Slide 1 dari 8</span>
+    <button class="btn-nav" id="btn-next" onclick="nextSlide()">BERIKUTNYA ▶</button>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const indicator = document.getElementById('indicator');
+
+    function updateSlides() {
+      slides.forEach((slide, index) => {
+        slide.classList.remove('active', 'prev');
+        
+        if (index === currentSlide) {
+          slide.classList.add('active');
+        } else if (index < currentSlide) {
+          slide.classList.add('prev');
+        }
+      });
+      indicator.textContent = `Slide ${currentSlide + 1} dari ${slides.length}`;
+    }
+
+    function nextSlide() {
+      if (currentSlide < slides.length - 1) {
+        currentSlide++;
+        updateSlides();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlides();
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        if (e.key === ' ') e.preventDefault();
+        nextSlide();
+      }
+      if (e.key === 'ArrowLeft') {
+        prevSlide();
+      }
+    });
+
+    // Inisialisasi awal
+    updateSlides();
+  </script>
+</body>
+</html>
